@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Game Library</title>
+	<meta http-equiv='Content-Type' content='text/html' charset='UTF-8'>
+	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+</head>
+
+<body style="padding:0 20px">
+	<div style="display: inline">
+		<h1>Game Library</h1>
+		<form th:action="@{/logout}" method="post" style="float: right">
+			<input type="submit" value="Sign Out" class="btn btn-lg btn-default" />
+		</form>
+		<h4>Logged in as: <span sec:authentication="name"></span></h4>
+	</div>
+	<div class="col-md-4" style="padding:20px 0">
+	</div>
+	<table class="table">
+		<tr class="info">
+			<th>Name</th>
+			<th>Console</th>
+			<th>Category</th>
+			<th>Published</th>
+			<th sec:authorize="hasAuthority('ADMIN')"></th>
+			<th sec:authorize="hasAuthority('ADMIN')"></th>
+		</tr>
+		<tr th:each="game : ${games}">
+			<td th:text="${game.name}"></td>
+			<td th:text="${game.console}"></td>
+			<td th:text="${game.category.name}"></td>
+			<td th:text="${game.published}"></td>
+			<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/edit/{id}(id=${game.id})}"
+					class="btn btn-default btn-sm">Edit</a></td>
+			<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${game.id})}"
+					class="btn btn-danger btn-sm">Delete</a></td>
+		</tr>
+	</table>
+	<a sec:authorize="hasAuthority('ADMIN')" href="/add" class="btn btn-primary">Add Game</a>
+</body>
+
+</html>
